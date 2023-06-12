@@ -1,0 +1,24 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<h1>Welcome</h1>
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+
+@code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //var authUser = (await AuthenticationState).User;
+        //if (authUser == null || !authUser.Identity.IsAuthenticated)
+        //{
+        //    return;
+        //}
+        await base.OnInitializedAsync();
+    }
+}

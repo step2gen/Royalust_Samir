@@ -1,0 +1,120 @@
+﻿@using Microsoft.AspNetCore.Hosting
+@using Microsoft.AspNetCore.Mvc.ViewEngines
+@inject IWebHostEnvironment Environment
+@inject ICompositeViewEngine Engine
+@inject IHttpContextAccessor http
+
+@{
+    var path = http.HttpContext?.Request.Path.Value;
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RoyalLust</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/Identity/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/Identity/css/site.css" />
+        <link href="~/css/profilesteptracker.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+              integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"
+              asp-fallback-href="~/Identity/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/Identity/css/site.css" asp-append-version="true" />
+        <link href="~/css/profilesteptracker.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/profilesteptracker.css" rel="stylesheet" asp-append-version="true" />
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+
+    @if (ViewData["Title"]?.ToString() == "Log in" || ViewData["Title"]?.ToString() == "Register")
+    {
+        <div class="container">
+            <partial name="_CookieConsentPartial" optional />
+            <main role="main" class="pb-1">
+                @RenderBody()
+            </main>
+        </div>
+    }
+    else
+    {
+        <section class="ftco-profilesection">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-12 col-lg-10">
+                        <div class="wrap d-md-flex">
+                            <div class="initial-form-wrap p-4 p-md-5">
+
+                                <div id="multi-step-form-container" style="margin-left:auto;margin-right:auto;">
+                                    <p class="text-center"> <a href="~/">Back</a></p>
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="mx-2 nav-link indexLink @(path=="/Identity/Account/Manage"?"active":null)" asp-page="./Index" style="cursor:pointer">
+                                                <span class="label">Basic Details</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="mx-2 nav-link passwordLink @(path == "/Identity/Account/Manage/ChangePassword" ? "active" : null)" asp-page="./ChangePassword" style="cursor:pointer">
+                                                <span class="label">Manage Password</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+
+                                    <div style="margin-left:auto;margin-right:auto;">
+                                        @RenderBody()
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    }
+
+    <environment include="Development">
+        <script src="~/JS/jquery.min.js"></script>
+        <script src="~/JS/bootstrap/bootstrap.min.js"></script>
+        <script src="~/JS/main.js"></script>
+        <script src="~/JS/popper.js"></script>
+        <script src="~/js/site.js"></script>
+
+
+        <script src="~/Identity/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+                asp-fallback-src="~/Identity/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2">
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/Identity/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj">
+        </script>
+        @*<script src="~/Identity/js/site.js" asp-append-version="true"></script>*@
+        <script src="~/js/site.js"></script>
+    </environment>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

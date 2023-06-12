@@ -1,0 +1,61 @@
+﻿@using RoyalLust.Test.Data;
+@inject ApplicationDbContext dbContext;
+@inject AuthenticationStateProvider authenticationStateProvider;
+@inject NavigationManager navigationManager;
+
+<AuthorizeView>
+    <Authorized>
+
+       @* <div class="profile_dropdown navbar-nav mb-2 mb-lg-0 mr-2">
+            <button onclick="myFunction()" class="profile_dropbtn">@Username</button>
+            <div id="myprofile_Dropdown" class="profile_dropdown-content">
+                 <a class="dropdown-item w-auto px-2 py-0 m-auto" href="Identity/Account/Manage"> Profile </a>
+            </div>
+        </div>*@
+
+        <ul class="profile_dropdown navbar-nav mb-2 mb-lg-0 mr-2">
+            <li class="nav-item dropdown">
+                @*<a class="nav-link dropdown-toggle p-0 mx-3" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    @context.User.Identity?.Name!
+                </a>*@
+                <a class="nav-link dropdown-toggle p-0 mx-3 profile_dropbtn" href="#" id="navbarDropdown" onclick="openProfileMenu()" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    @Username
+                </a>
+                <ul class="dropdown-menu p-2 profile_dropdown-content" aria-labelledby="navbarDropdown" style="width: 90%;" id="myprofile_Dropdown">
+                    <li><a class="dropdown-item w-auto px-2 py-0 m-auto" href="Identity/Account/Manage"> Profile </a></li>
+                </ul>
+            </li>
+        </ul>
+        <form method="post" action="Identity/Account/Logout">
+            <button type="submit" class="btn btn-primary">Log out</button>
+        </form>
+    </Authorized>
+</AuthorizeView>
+
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationState { get; set; }
+
+    private string? Username = default;
+    protected override async Task OnInitializedAsync()
+    {
+        var authUser = (await AuthenticationState).User;
+        if (authUser == null || !authUser.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("Identity/Account/Login", true);
+            //var email = authUser?.Identity.Name;
+            //var user = dbContext.Users.Where(x => x.UserName == email).FirstOrDefault();
+            //if (user != null)
+            //{
+            //    Username = user?.Firstname+ " "+user?.Lastname;
+            //}
+        }
+        Username = authUser.Identity.Name;
+        //else
+        //{
+        //    navigationManager.NavigateTo("Identity/Account/Login", true);
+        //}
+        await base.OnInitializedAsync();
+    }
+}
